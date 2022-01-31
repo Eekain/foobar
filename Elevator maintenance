@@ -1,0 +1,119 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ *
+ * @author 941593
+ */
+public class Test{
+    public static int compare(List<Integer> a, List<Integer> b){
+        //return 0 if equal, -1 if a<b, +1 if a>b
+        int size = (a.size()>=b.size()) ? b.size() : a.size();
+        
+        int res = 0;
+        for(int i = 0; i<size; i++){
+            int x = a.get(i)-b.get(i); // a comparison base
+            if(x==0){
+                continue;
+            } else if(x<0){
+                res= -1;
+            } else if(x>0){
+                res= 1;
+            }
+            
+        }
+        if(res==0&&a.size()>b.size()){
+            res=1;
+        } else if(res==0&&a.size()<b.size()){
+            res=-1;
+        }
+        
+        return res;
+        
+        
+    }
+    public static String[] solution(String[] l) {
+        String res = "";
+        List<List<Integer>> coLi = new ArrayList<>();
+        //fill up coLi
+        for(String si:l){
+            String[] k = si.split(".");
+            List<Integer> li = new ArrayList<>();
+            for(String i:k){
+                li.add(Integer.parseInt(i));
+            }
+            System.out.println("this ain't it"+li);
+            coLi.add(li);
+        }
+        //separte method to compare, then run it through a switch-case
+        //freshly learnt bubble sort
+        System.out.println(coLi);
+        List<Integer> temp = new ArrayList<>();
+        for(int j=0; j<coLi.size(); j++){ //size or size-1 ?
+            for(int i=0; i<coLi.size()-1; i++){
+                
+                switch(compare(coLi.get(i), coLi.get(i+1))){
+                    case 1:
+                        temp.addAll(coLi.get(i));
+                        coLi.get(i).clear();
+                        coLi.set(i, coLi.get(i+1));
+                        coLi.get(i+1).clear();
+                        coLi.set(i+1, temp);
+                        break;
+                    case -1:
+                        temp.addAll(coLi.get(i+1));
+                        coLi.get(i+1).clear();
+                        coLi.set(i+1, coLi.get(i));
+                        coLi.get(i).clear();
+                        coLi.set(i, temp);
+                        break;
+                    
+                }
+                temp.clear();
+            }
+        }
+        System.out.println(coLi); // turns out empty
+        System.out.println("we got till here");
+        //TODO: put the sorted lists through a toString
+        String[] s = new String[l.length];
+        System.out.println("still k");
+        for(int i=0; i<coLi.size(); i++){
+            String str ="";
+            System.out.println("problem "+i);
+            for(int j = 0; j<=coLi.get(i).size()-1; j++){
+                str += coLi.get(i).get(j);
+                str += ".";
+                System.out.println(str);
+            }
+            str += coLi.get(i).get(coLi.get(i).size());
+            s[i]= str;
+        }
+        
+        
+        
+        
+        return s;
+    }
+    
+    public static void main(String[] args) {
+        String[] s = new String[5];
+        s[0]="1.0.0";
+        s[1]="2";
+        s[2]="2.0.1";
+        s[3]="324.23.0";
+        s[4]="2.23";
+        for(String i:s){
+            System.out.println(i);
+        }
+        System.out.println(solution(s));
+         
+    }
+}
